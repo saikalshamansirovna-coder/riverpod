@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverprod/features/auth/application/auth_controller.dart';
 import 'package:riverprod/features/products/application/products_controller.dart';
 import 'package:riverprod/features/products/presentation/product_detail_page.dart';
 
@@ -38,7 +39,26 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
     final products = ref.watch(productsControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Products List")),
+      appBar: AppBar(
+        title: const Text("Products List"),
+        actions: [
+          IconButton(
+            tooltip: 'Выйти',
+            onPressed: () async {
+              try {
+                await ref.read(authControllerProvider.notifier).logout();
+              } on Exception catch (error) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Не удалось выйти: $error')),
+                  );
+                }
+              }
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
+      ),
       body: products.when(
         data: (data) {
           final controller = ref.read(productsControllerProvider.notifier);

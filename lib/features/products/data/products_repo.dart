@@ -1,14 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:riverprod/core/network/dio_provider.dart';
 import 'package:riverprod/features/products/data/model/products_model.dart';
 
 part 'products_repo.g.dart';
-
-@riverpod
-Dio dio(Ref ref) {
-  return Dio(BaseOptions(baseUrl: 'https://dummyjson.com/'));
-}
 
 @riverpod
 ProductsRepo productsRepo(Ref ref) {
